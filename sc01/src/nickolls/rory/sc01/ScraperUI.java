@@ -13,6 +13,7 @@ public class ScraperUI extends Application {
 		// TODO Auto-generated method stub
 		Parent root = FXMLLoader.load(getClass().getResource("ScraperUI.fxml"));
 		Scene scene = new Scene(root);
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

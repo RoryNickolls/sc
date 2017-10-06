@@ -46,6 +46,7 @@ public class NameScraper implements Runnable {
 		} 
 		catch(Exception e)
 		{
+			callback.finish("ERROR");
 			e.printStackTrace();
 		}
 		

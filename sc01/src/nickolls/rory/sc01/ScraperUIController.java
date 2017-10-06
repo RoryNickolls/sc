@@ -1,5 +1,10 @@
 package nickolls.rory.sc01;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,12 +15,22 @@ public class ScraperUIController {
 
 	@FXML
 	private Button btn_findName;
-
+	
+	@FXML
+	private Button btn_findUrl;
+	
 	@FXML
 	private TextField txtFld_email;
+	
+	@FXML
+	private TextField txtFld_name;
+	
+	@FXML
+	private TextField txtFld_url;
 
 	@FXML
 	private Label lbl_name;
+	
 
 	@FXML
 	private void initialize() {
@@ -37,6 +52,29 @@ public class ScraperUIController {
 			}));
 			scraper.start();
 
+		});
+		
+		btn_findUrl.setOnAction((event) -> {
+			txtFld_url.setText("Connecting...");
+			
+			Thread scraper = new Thread(new UrlScraper(txtFld_name.getText(), (result) -> {
+				Platform.runLater(new Runnable() {
+					public void run()
+					{
+						txtFld_url.setText((String) result);
+						
+						// open a browser showing the link
+						try {
+							Desktop.getDesktop().browse((new URI((String)result)));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}));
+			
+			scraper.start();
 		});
 	}
 }
