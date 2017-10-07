@@ -6,9 +6,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class NameScraper implements Runnable {
 	private String email;
-	private ScraperCallback callback;
+	private IScraperCallback callback;
 	
-	public NameScraper(String email, ScraperCallback callback)
+	public NameScraper(String email, IScraperCallback callback)
 	{
 		this.email = email;
 		this.callback = callback;

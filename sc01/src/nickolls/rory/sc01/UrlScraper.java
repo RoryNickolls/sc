@@ -11,9 +11,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public class UrlScraper implements Runnable {
 	
 	private String name;
-	private ScraperCallback callback;
+	private IScraperCallback callback;
 	
-	public UrlScraper(String name, ScraperCallback callback)
+	public UrlScraper(String name, IScraperCallback callback)
 	{
 		this.name = name;
 		this.callback = callback;
