@@ -1,6 +1,6 @@
 package nickolls.rory.sc01;
 
-public interface IScraperCallback {
+public interface ScraperCallback {
 	
 	void finish(Object result);
 
