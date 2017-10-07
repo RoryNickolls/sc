@@ -41,7 +41,6 @@ public class NameScraper implements Runnable {
 			{
 				// activate the callback and set name
 				name = firstHeader.asText();
-				callback.finish(name);
 			}
 		} 
 		catch(Exception e)
@@ -49,7 +48,7 @@ public class NameScraper implements Runnable {
 			callback.finish("ERROR");
 			e.printStackTrace();
 		}
-		
+		callback.finish(name);
 		client.close();
 	}
 }

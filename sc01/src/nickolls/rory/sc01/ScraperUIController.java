@@ -34,6 +34,7 @@ public class ScraperUIController {
 
 	@FXML
 	private void initialize() {
+		// lambda expressions!
 		btn_findName.setOnAction((event) -> {
 
 			lbl_name.setText("Connecting...");
