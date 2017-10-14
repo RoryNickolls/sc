@@ -28,6 +28,9 @@ public class Statement {
 			case "clear":
 				variable.setValue(0);
 				break;
+		    default:
+				System.out.println("INVALID STATEMENT");
+				break;
 		}
 	}
 	

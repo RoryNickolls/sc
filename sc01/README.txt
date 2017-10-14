@@ -1,6 +1,14 @@
-spacecadets
+Copyright 2017 Rory Nickolls
 
- Copyright [2017] [Rory Nickolls]
+University of Southampton, ECS, Space Cadets 2017
+
+Week 1
+
+Web Scraper with a JavaFX GUI.
+Can do Google searches and open browsers with the first result,
+or find names from email address on the ECS intranet.
+
+Copyright [2017] [Rory Nickolls]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

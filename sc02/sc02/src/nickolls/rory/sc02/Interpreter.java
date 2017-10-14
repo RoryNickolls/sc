@@ -29,6 +29,9 @@ public class Interpreter {
 			{
 				program += curLine;
 			}
+			// remove tabs
+			program = program.replaceAll("[\t]", "");
+			// split program into array of lines
 			programLines = program.split(";");
 
 		}
@@ -52,14 +55,18 @@ public class Interpreter {
 	private void enterLoop(int lineNumber)
 	{
 		String[] currentLine = programLines[lineNumber].split(" ");
+		
+		// find properties of the while loop
 		Variable variable = variables.get(currentLine[1]);
 		int compareVal = Integer.parseInt(currentLine[3]);
 		Condition condition = new Condition(variable, new Variable(compareVal));
 		while(condition.evaluate(currentLine[2]))
 		{
+			// keep looping through the loop's statements until 'end' is found
 			progCtr = lineNumber + 1;
 			while(!programLines[progCtr].split(" ")[0].equals("end"))
 			{
+				// this will either execute a statement or recursively enter another while loop
 				interpretLine(progCtr);
 				progCtr++;
 			}
@@ -68,11 +75,12 @@ public class Interpreter {
 	
 	private void executeStatement(String[] line)
 	{
-		// try to find referenced variable in memory
+		// try to find referenced variable in memory or create a new one
 		Variable refVar;
 		if(!variables.containsKey(line[1]))
 		{
 			refVar = new Variable(0);
+			System.out.println("new  var! " + progCtr);
 			variables.put(line[1], refVar);
 		}
 		else
@@ -87,25 +95,33 @@ public class Interpreter {
 	
 	private void interpretLine(int lineNumber)
 	{
-		// remove tabs, etc
-		String cutLine = programLines[lineNumber].replaceAll("[\t]", "");
-		String[] line = cutLine.split(" ");
+		String[] line = programLines[lineNumber].split(" ");
 		
-		if(line[0].equals("end"))
+		// do nothing for end or empty lines
+		if(line[0].equals("end") || line[0].equals(""))
 			return;
 		
 		if(!line[0].equals("while"))
 		{
+			// if this line is not a while loop then it must be a statement so execute it
 			executeStatement(line);
-			for(String varName : variables.keySet())
-			{
-				System.out.println(varName + ": " + variables.get(varName).getValue());
-			}
+			printState();
 		}
 		else
 		{
 			enterLoop(lineNumber);
 		}
+	}
+	
+	private void printState()
+	{
+		System.out.print("Line:" + progCtr + " ");
+		String variableStr = "";
+		for(String varName : variables.keySet())
+		{
+			variableStr += varName + ":" + variables.get(varName).getValue() + " ";
+		}
+		System.out.print(variableStr + "\n");
 	}
 	
 	public static void main(String[] args)
@@ -114,5 +130,4 @@ public class Interpreter {
 		interpreter.loadToMemory(interpreter.getClass().getResource("/nickolls/rory/sc02/program.bb").getPath().toString());
 		interpreter.beginInterpretation();
 	}
-
 }
