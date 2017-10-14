@@ -50,6 +50,19 @@ public class Interpreter {
 			interpretLine(progCtr);
 			progCtr++;
 		}
+		
+		// execution finished, print memory usage
+		int programMemory = 0;
+		for(String s : programLines)
+		{
+			programMemory += s.length() * 8;
+		}
+		int variableMemory = variables.values().size() * Integer.BYTES;
+		System.out.println("************************************************");
+		System.out.println("	ROUGH MEMORY USAGE OF INTERPRETER");
+		System.out.println("		PROGRAM: " + programMemory + " bytes");
+		System.out.println("		VARIABLES: " + variableMemory + " bytes");
+		System.out.println("************************************************");
 	}
 	
 	private void enterLoop(int lineNumber)
@@ -80,7 +93,6 @@ public class Interpreter {
 		if(!variables.containsKey(line[1]))
 		{
 			refVar = new Variable(0);
-			System.out.println("new  var! " + progCtr);
 			variables.put(line[1], refVar);
 		}
 		else
