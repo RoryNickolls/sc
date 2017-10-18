@@ -1,4 +1,4 @@
-package nickolls.rory.sc02;
+package nickolls.rory.sc03;
 
 /*
  * All statements should take the structure [COMMAND] [VARIABLE]

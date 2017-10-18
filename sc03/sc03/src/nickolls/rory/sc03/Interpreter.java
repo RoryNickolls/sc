@@ -1,4 +1,4 @@
-package nickolls.rory.sc02;
+package nickolls.rory.sc03;
 
 import java.io.BufferedReader;
 import java.io.File;
