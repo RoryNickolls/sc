@@ -29,12 +29,22 @@ public class Interpreter {
 			String curLine;
 			while((curLine = br.readLine()) != null)
 			{
+				
 				program += curLine;
 			}
 			// remove tabs
 			program = program.replaceAll("[\t]", "");
 			// split program into array of lines
 			programLines = program.split(";");
+			for(int i = 0; i < programLines.length; i++)
+			{
+				String line = programLines[i];
+				if(line.contains("#"))
+				{
+					line = line.substring(0, line.indexOf('#'));
+				}
+				programLines[i] = line;
+			}
 
 		}
 		catch(IOException e)
@@ -168,7 +178,7 @@ public class Interpreter {
 	public static void main(String[] args)
 	{
 		Interpreter interpreter = new Interpreter();
-		interpreter.loadToMemory(interpreter.getClass().getResource("/nickolls/rory/sc02/program.bb").getPath().toString());
+		interpreter.loadToMemory(interpreter.getClass().getResource("/nickolls/rory/sc03/program.bb").getPath().toString());
 		interpreter.beginInterpretation();
 	}
 }

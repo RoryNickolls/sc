@@ -6,6 +6,7 @@ incr Y;
 incr Y;
 incr Y;
 clear Z;
+# multiply X and Z
 while X not 0 do;
 	clear W;
 	while Y not 0 do;
@@ -19,12 +20,15 @@ while X not 0 do;
 	end;
 	decr X;
 end;
+
 print Z;
 
+# count to 2 and print it
 def count;
 	incr F;
+	incr F;
 	print F;
-	run count;
 end;
 
+# run count function
 run count;
