@@ -4,18 +4,27 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class Server {
 	
 	public static final int MAX_NAME_LENGTH = 8;
+	public static final int MAX_MESSAGE_LENGTH = 1024;
 	
 	private ArrayList<ServerClient> connectedClients;
 	
+	private ServerConsole serverConsole;
+	
 	private ServerSocket serverSocket;
 	
-	public Server()
+	public Server(ServerConsole console)
 	{
+		this.serverConsole = console;
+		
 		connectedClients = new ArrayList<ServerClient>();
 		
 		try {
@@ -40,9 +49,9 @@ public class Server {
 						DataInputStream reader = new DataInputStream(clientSocket.getInputStream());
 						byte[] nameBytes = new byte[MAX_NAME_LENGTH];
 						reader.read(nameBytes);
-						ServerClient newClient = new ServerClient(new String(nameBytes), clientSocket.getInetAddress().getHostAddress());
+						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes), clientSocket.getInetAddress().getHostAddress());
 						connectedClients.add(newClient);
-						System.out.println("Client " + newClient.getClientName() + " connected from " + newClient.getClientAddress());
+						serverConsole.getConsoleController().addMessage("Client " + newClient.getClientName() + " connected from " + newClient.getClientAddress());
 					} 
 					catch(IOException e)
 					{
@@ -51,12 +60,27 @@ public class Server {
 				}
 			}
 		});
+		connectionThread.setDaemon(true);
 		connectionThread.start();
 	}
 	
-	public static void main(String[] args)
+	public void listen()
 	{
-		Server server = new Server();
-		server.acceptConnections();
+		DataInputStream reader;
+		try {
+			for(ServerClient client : connectedClients)
+			{
+				Socket socket = client.getClientSocket();
+			
+				reader = new DataInputStream(socket.getInputStream());
+				byte[] message = new byte[1024];
+				reader.read(message);
+				System.out.println(client.getClientName() + ":" + new String(message));
+			}
+		} 
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
