@@ -1,4 +1,4 @@
-package nickolls.rory.sc04;
+package com.nickolls.sc04;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -16,8 +16,6 @@ public class ConsoleController {
 	
 	public void addMessage(String msg)
 	{
-		String text = txtArea_console.getText() + "\n";
-		text += msg;
-		txtArea_console.setText(text);
+		txtArea_console.setText(txtArea_console.getText() + msg + "\n");
 	}
 }

@@ -1,4 +1,4 @@
-package nickolls.rory.sc04;
+package com.nickolls.sc04;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

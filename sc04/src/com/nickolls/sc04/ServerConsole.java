@@ -1,4 +1,4 @@
-package nickolls.rory.sc04;
+package com.nickolls.sc04;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +22,6 @@ public class ServerConsole extends Application {
 		
 		Server server = new Server(this);
 		server.acceptConnections();
-		server.listen();
 	}
 	
 	public ServerConsoleController getConsoleController()
@@ -32,8 +31,6 @@ public class ServerConsole extends Application {
 	
 	public static void main(String[] args)
 	{
-		ServerConsole console = new ServerConsole();
 		ServerConsole.launch();
-		//server.listen();
 	}
 }

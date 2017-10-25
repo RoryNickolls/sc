@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nickolls.rory.sc04.ServerConsoleController">
+<VBox prefHeight="283.0" prefWidth="664.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nickolls.sc04.ClientConsoleController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -49,10 +53,23 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="173.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
          <children>
-            <TextArea fx:id="txtArea_console" prefHeight="300.0" prefWidth="640.0" />
+            <TextArea fx:id="txtArea_console" layoutX="7.0" layoutY="46.0" prefHeight="176.0" prefWidth="640.0" />
+            <TextField fx:id="txtFld_message" layoutX="7.0" layoutY="231.0" prefHeight="25.0" prefWidth="566.0" />
+            <Button fx:id="btn_send" layoutX="586.0" layoutY="231.0" mnemonicParsing="false" onAction="#handleSendMessage" prefHeight="25.0" prefWidth="61.0" text="Send" />
+            <HBox layoutX="7.0" layoutY="5.0" prefHeight="25.0" prefWidth="640.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="txtFld_alias" promptText="Alias" />
+                  <TextField fx:id="txtFld_address" promptText="Address" />
+                  <TextField fx:id="txtFld_port" promptText="Port" />
+                  <Button fx:id="btn_joinServer" mnemonicParsing="false" onAction="#handleJoinServer" prefHeight="25.0" prefWidth="82.0" text="Join Server" />
+               </children>
+            </HBox>
          </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
     </AnchorPane>
   </children>
 </VBox>
