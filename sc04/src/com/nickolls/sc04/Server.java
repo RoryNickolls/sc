@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
 	
@@ -53,7 +54,9 @@ public class Server {
 						listen(newClient);
 						
 						String joinMsg = "Client " + newClient.getClientName() + " connected from " + newClient.getClientAddress();
-						broadcastMessage(joinMsg, true);
+						List<ServerClient> exclusion = new ArrayList<ServerClient>();
+						exclusion.add(newClient);
+						broadcastMessageExcluding(joinMsg, true, exclusion);
 					} 
 					catch(IOException e)
 					{
@@ -87,7 +90,7 @@ public class Server {
 						reader.read(message);
 						
 						String broadcastMsg = client.getClientName() + ": " + new String(message);
-						broadcastMessage(broadcastMsg, true);
+						broadcastMessageAll(broadcastMsg);
 					}
 				} 
 				catch(IOException e)
@@ -106,16 +109,19 @@ public class Server {
 	 * Broadcasts a message to every connected client
 	 * @param msg Byte array to broadcast
 	 */
-	public void broadcastMessage(byte[] msg, boolean includeServer)
+	public void broadcastMessage(byte[] msg, boolean includeServer, List<ServerClient> excludedClients)
 	{
 		try {
 			DataOutputStream writer;
 			for(ServerClient client : connectedClients)
 			{
 				Socket socket = client.getClientSocket();
-			
-				writer = new DataOutputStream(socket.getOutputStream());
-				writer.write(msg);
+				
+				if(excludedClients == null || !excludedClients.contains(client))
+				{
+					writer = new DataOutputStream(socket.getOutputStream());
+					writer.write(msg);
+				}
 			}
 			
 			if(includeServer)
@@ -129,14 +135,19 @@ public class Server {
 		}
 	}
 	
-	public void broadcastMessage(String msg, boolean includeServer)
+	public void broadcastMessageAll(String msg)
 	{
-		broadcastMessage(msg.getBytes(), includeServer);
+		broadcastMessage(msg.getBytes(), true, null);
+	}
+	
+	public void broadcastMessageExcluding(String msg, boolean server, List<ServerClient> excludedClients)
+	{
+		broadcastMessage(msg.getBytes(), server, excludedClients);
 	}
 	
 	private void disconnectClient(ServerClient client)
 	{
-		broadcastMessage(client.getClientName() + " has disconnected.", true);
+		broadcastMessageAll(client.getClientName() + " has disconnected.");
 		connectedClients.remove(client);
 	}
 }
