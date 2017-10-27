@@ -12,12 +12,10 @@ public class ConsoleController {
 	@FXML
 	TextFlow txtFlow_console;
 	
-	@FXML
-	public void initialize()
-	{
-		
-	}
-	
+	/**
+	 * Adds a message to the text area and handles its formatting
+	 * @param msg Message with embedded formatting to add
+	 */
 	public void addMessage(String msg)
 	{
 		Platform.runLater(new Runnable() {

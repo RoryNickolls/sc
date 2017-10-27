@@ -10,6 +10,9 @@ public class ServerConsole extends Application {
 	
 	private ServerConsoleController consoleController;
 
+	/**
+	 * Initialise the server console window
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{

@@ -2,6 +2,11 @@ package com.nickolls.sc04;
 
 import java.net.Socket;
 
+/**
+ * Structure class to represent a client that is connected to the server
+ * @author Rory
+ *
+ */
 public class ServerClient {
 	
 	private Socket clientSocket;

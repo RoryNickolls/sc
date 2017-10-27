@@ -15,6 +15,13 @@ public class Client {
 		this.clientConsole = console;
 	}
 	
+	/**
+	 * Opens a connection to a server and begins listening for data
+	 * @param alias Alias to send to the server on connection
+	 * @param host Host address to connect to
+	 * @param port Port on which the server is listening
+	 * @return Whether the connection was made successfully
+	 */
 	public boolean joinServer(String alias, String host, int port)
 	{
 		try {
@@ -32,11 +39,10 @@ public class Client {
 		return false;
 	}
 	
-	public void leaveServer(Server server)
-	{
-		
-	}
-	
+	/**
+	 * Sends a message to the server
+	 * @param msg Message to send
+	 */
 	public void sendMessage(String msg)
 	{
 		try {
@@ -82,6 +88,11 @@ public class Client {
 		listenThread.start();
 	}
 	
+	/**
+	 * Writes raw byte data to the server
+	 * @param data Array of bytes to write
+	 * @throws IOException
+	 */
 	private void writeData(byte[] data) throws IOException
 	{
 		DataOutputStream writer = new DataOutputStream(clientSocket.getOutputStream());

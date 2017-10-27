@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 
 public class ClientConsoleController extends ConsoleController {
 	
+	// References to the GUI controls
+	
 	@FXML
 	private TextField txtFld_alias;
 	
@@ -35,6 +37,9 @@ public class ClientConsoleController extends ConsoleController {
 		btn_send.setDisable(true);
 	}
 	
+	/**
+	 * Runs when the send message button is pressed
+	 */
 	@FXML
 	public void handleSendMessage()
 	{
@@ -43,6 +48,9 @@ public class ClientConsoleController extends ConsoleController {
 		txtFld_message.setText("");
 	}
 	
+	/**
+	 * Runs when the join server button is pressed. Attempts to connect to the specified server.
+	 */
 	@FXML
 	public void handleJoinServer()
 	{
@@ -64,11 +72,18 @@ public class ClientConsoleController extends ConsoleController {
 		}
 	}
 	
+	/**
+	 * Sets the client that this console is handling
+	 * @param client
+	 */
 	public void setClient(Client client)
 	{
 		this.client = client;
 	}
 	
+	/**
+	 * Resets the enabled states of all fields to default. Used when connection is lost to a server.
+	 */
 	public void reset()
 	{
 		txtFld_alias.setDisable(false);

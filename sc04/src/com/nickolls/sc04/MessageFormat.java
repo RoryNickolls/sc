@@ -1,5 +1,10 @@
 package com.nickolls.sc04;
 
+/**
+ * A structure that represents a #<message># and its '<format>'
+ * @author Rory
+ *
+ */
 public class MessageFormat
 {
 	private String message;

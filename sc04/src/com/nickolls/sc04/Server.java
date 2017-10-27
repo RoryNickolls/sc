@@ -11,7 +11,9 @@ import java.util.Random;
 
 public class Server {
 	
+	// maximum number of characters an alias can have
 	public static final int MAX_NAME_LENGTH = 8;
+	// maximum length of a message
 	public static final int MAX_MESSAGE_LENGTH = 1024;
 	
 	
@@ -21,6 +23,10 @@ public class Server {
 	
 	private ServerSocket serverSocket;
 	
+	/**
+	 * Initalise and open server socket
+	 * @param console
+	 */
 	public Server(ServerConsole console)
 	{
 		this.serverConsole = console;
@@ -48,17 +54,25 @@ public class Server {
 				while(true)
 				{
 					try {
+						
+						// attempt to open a connection
 						Socket clientSocket = serverSocket.accept();
 						DataInputStream reader = new DataInputStream(clientSocket.getInputStream());
+						
+						// the client will send their alias first, so receive that
 						byte[] nameBytes = new byte[512];
 						reader.read(nameBytes);
 						
+						//assign a random color for this new client
 						Random rand = new Random();
 						String color = "rgb(" + rand.nextInt(255) + "," + rand.nextInt(255) + "," + rand.nextInt(255) + ")";
+						
+						// create a client object and begin listening for data
 						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes, 0, MAX_NAME_LENGTH), clientSocket.getInetAddress().getHostAddress(), color);
 						connectedClients.add(newClient);
 						listen(newClient);
 						
+						// broadcast a join message to all clients except the new one
 						String joinMsg = "'-fx-font-style:italic'#Client_" + newClient.getClientName() + "_connected_from_" + newClient.getClientAddress() + "#";
 						List<ServerClient> exclusion = new ArrayList<ServerClient>();
 						exclusion.add(newClient);
@@ -71,6 +85,8 @@ public class Server {
 				}
 			}
 		});
+		
+		// ensure that JVM will entirely exit regardless of this thread's state
 		connectionThread.setDaemon(true);
 		connectionThread.start();
 	}
@@ -96,6 +112,8 @@ public class Server {
 						int readBytes = reader.read(message);
 						if(readBytes != -1)
 						{
+							
+							// broadcast the message to all clients and the server, with the client's name prefixed
 							String broadcastMsg = "'-fx-font-weight:bold;-fx-fill:" + client.getClientColor() + "'#" + client.getClientName() + "#: " + new String(message, 0, readBytes);
 							broadcastMessageAll(broadcastMsg);
 						}
@@ -121,10 +139,13 @@ public class Server {
 	{
 		try {
 			DataOutputStream writer;
+			
+			// go through each connected client
 			for(ServerClient client : connectedClients)
 			{
 				Socket socket = client.getClientSocket();
 				
+				// if the client is not excluded then write data to it
 				if(socket.isConnected() && (excludedClients == null || !excludedClients.contains(client)))
 				{
 					writer = new DataOutputStream(socket.getOutputStream());
@@ -143,19 +164,44 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Broadcasts a message to all connected clients and the server console
+	 * @param msg
+	 */
 	public void broadcastMessageAll(String msg)
 	{
 		broadcastMessage(msg.getBytes(), true, null);
 	}
 	
+	/**
+	 * Broadcasts a message to specified clients
+	 * @param msg
+	 * @param server Whether the server should receive this message
+	 * @param excludedClients Clients to exclude from this message
+	 */
 	public void broadcastMessageExcluding(String msg, boolean server, List<ServerClient> excludedClients)
 	{
 		broadcastMessage(msg.getBytes(), server, excludedClients);
 	}
 	
+	/**
+	 * Disconnects a particular client from the server
+	 * @param client
+	 */
 	private void disconnectClient(ServerClient client)
 	{
 		connectedClients.remove(client);
 		broadcastMessageAll("'-fx-font-style:italic'#" + client.getClientName() + "_has_disconnected.#");
+		
+		try {
+			if(!client.getClientSocket().isClosed())
+			{
+				client.getClientSocket().close();
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

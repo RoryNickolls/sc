@@ -10,6 +10,9 @@ public class ClientConsole extends Application {
 	
 	private ClientConsoleController consoleController;
 
+	/**
+	 * Sets up the window
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
