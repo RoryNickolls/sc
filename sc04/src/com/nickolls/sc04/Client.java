@@ -15,19 +15,21 @@ public class Client {
 		this.clientConsole = console;
 	}
 	
-	public void joinServer(String alias, String host, int port)
+	public boolean joinServer(String alias, String host, int port)
 	{
 		try {
 			clientSocket = new Socket(host, port);
 			byte[] nameBytes = alias.getBytes();
 			writeData(nameBytes);
 			listen();
-			clientConsole.getConsoleController().addMessage("Connection successful.");
+			return true;
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 	
 	public void leaveServer(Server server)
@@ -62,8 +64,8 @@ public class Client {
 					while(true)
 					{
 						byte[] message = new byte[1024];
-						reader.read(message);
-						clientConsole.getConsoleController().addMessage(new String(message));
+						int readBytes = reader.read(message);
+						clientConsole.getConsoleController().addMessage(new String(message, 0, readBytes));
 					}
 				} 
 				catch(IOException e)

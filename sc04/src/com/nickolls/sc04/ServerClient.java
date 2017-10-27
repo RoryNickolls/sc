@@ -7,12 +7,14 @@ public class ServerClient {
 	private Socket clientSocket;
 	private String clientName;
 	private String clientAddress;
+	private String clientColor;
 	
-	public ServerClient(Socket socket, String name, String address)
+	public ServerClient(Socket socket, String name, String address, String color)
 	{
 		this.clientSocket = socket;
 		this.clientName = name;
 		this.clientAddress = address;
+		this.clientColor = color;
 	}
 	
 	public Socket getClientSocket()
@@ -28,6 +30,11 @@ public class ServerClient {
 	public String getClientAddress()
 	{
 		return this.clientAddress;
+	}
+	
+	public String getClientColor()
+	{
+		return this.clientColor;
 	}
 
 }

@@ -18,6 +18,7 @@ public class ClientConsole extends Application {
 		consoleController = (ClientConsoleController) loader.getController();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 		
 		Client client = new Client(this);

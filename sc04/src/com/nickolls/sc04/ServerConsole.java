@@ -18,6 +18,7 @@ public class ServerConsole extends Application {
 		consoleController = (ServerConsoleController) loader.getController();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 		
 		Server server = new Server(this);

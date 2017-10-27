@@ -7,11 +7,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Server {
 	
 	public static final int MAX_NAME_LENGTH = 8;
 	public static final int MAX_MESSAGE_LENGTH = 1024;
+	
 	
 	private ArrayList<ServerClient> connectedClients;
 	
@@ -27,6 +29,7 @@ public class Server {
 		
 		try {
 			serverSocket = new ServerSocket(8888);
+			serverConsole.getConsoleController().addMessage("Server initialised.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,7 +52,10 @@ public class Server {
 						DataInputStream reader = new DataInputStream(clientSocket.getInputStream());
 						byte[] nameBytes = new byte[MAX_NAME_LENGTH];
 						reader.read(nameBytes);
-						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes), clientSocket.getInetAddress().getHostAddress());
+						
+						Random rand = new Random();
+						String color = "rgb(" + rand.nextInt(255) + "," + rand.nextInt(255) + "," + rand.nextInt(255) + ")";
+						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes), clientSocket.getInetAddress().getHostAddress(), color);
 						connectedClients.add(newClient);
 						listen(newClient);
 						
@@ -86,11 +92,15 @@ public class Server {
 						Socket socket = client.getClientSocket();
 					
 						reader = new DataInputStream(socket.getInputStream());
-						byte[] message = new byte[1024];
-						reader.read(message);
 						
-						String broadcastMsg = client.getClientName() + ": " + new String(message);
-						broadcastMessageAll(broadcastMsg);
+						if(!socket.isClosed())
+						{
+							byte[] message = new byte[1024];
+							int readBytes = reader.read(message);
+						
+							String broadcastMsg = "'-fx-font-weight:bold;-fx-fill:" + client.getClientColor() + "'#" + client.getClientName() + "#: " + new String(message, 0, readBytes);
+							broadcastMessageAll(broadcastMsg);
+						}
 					}
 				} 
 				catch(IOException e)
@@ -109,7 +119,7 @@ public class Server {
 	 * Broadcasts a message to every connected client
 	 * @param msg Byte array to broadcast
 	 */
-	public void broadcastMessage(byte[] msg, boolean includeServer, List<ServerClient> excludedClients)
+	public synchronized void broadcastMessage(byte[] msg, boolean includeServer, List<ServerClient> excludedClients)
 	{
 		try {
 			DataOutputStream writer;
@@ -117,7 +127,7 @@ public class Server {
 			{
 				Socket socket = client.getClientSocket();
 				
-				if(excludedClients == null || !excludedClients.contains(client))
+				if(socket.isConnected() && (excludedClients == null || !excludedClients.contains(client)))
 				{
 					writer = new DataOutputStream(socket.getOutputStream());
 					writer.write(msg);
