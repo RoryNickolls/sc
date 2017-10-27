@@ -29,7 +29,7 @@ public class Server {
 		
 		try {
 			serverSocket = new ServerSocket(8888);
-			serverConsole.getConsoleController().addMessage("Server initialised.");
+			serverConsole.getConsoleController().addMessage("'-fx-font-style:italic'#Server_initialised.#");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,16 +50,16 @@ public class Server {
 					try {
 						Socket clientSocket = serverSocket.accept();
 						DataInputStream reader = new DataInputStream(clientSocket.getInputStream());
-						byte[] nameBytes = new byte[MAX_NAME_LENGTH];
+						byte[] nameBytes = new byte[512];
 						reader.read(nameBytes);
 						
 						Random rand = new Random();
 						String color = "rgb(" + rand.nextInt(255) + "," + rand.nextInt(255) + "," + rand.nextInt(255) + ")";
-						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes), clientSocket.getInetAddress().getHostAddress(), color);
+						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes, 0, MAX_NAME_LENGTH), clientSocket.getInetAddress().getHostAddress(), color);
 						connectedClients.add(newClient);
 						listen(newClient);
 						
-						String joinMsg = "Client " + newClient.getClientName() + " connected from " + newClient.getClientAddress();
+						String joinMsg = "'-fx-font-style:italic'#Client_" + newClient.getClientName() + "_connected_from_" + newClient.getClientAddress() + "#";
 						List<ServerClient> exclusion = new ArrayList<ServerClient>();
 						exclusion.add(newClient);
 						broadcastMessageExcluding(joinMsg, true, exclusion);
@@ -92,12 +92,10 @@ public class Server {
 						Socket socket = client.getClientSocket();
 					
 						reader = new DataInputStream(socket.getInputStream());
-						
-						if(!socket.isClosed())
+						byte[] message = new byte[1024];
+						int readBytes = reader.read(message);
+						if(readBytes != -1)
 						{
-							byte[] message = new byte[1024];
-							int readBytes = reader.read(message);
-						
 							String broadcastMsg = "'-fx-font-weight:bold;-fx-fill:" + client.getClientColor() + "'#" + client.getClientName() + "#: " + new String(message, 0, readBytes);
 							broadcastMessageAll(broadcastMsg);
 						}
@@ -105,7 +103,7 @@ public class Server {
 				} 
 				catch(IOException e)
 				{
-					e.printStackTrace();
+					// socket has closed on the other side, client must have disconnected
 					shouldListen = false;
 					disconnectClient(client);
 				}
@@ -157,7 +155,7 @@ public class Server {
 	
 	private void disconnectClient(ServerClient client)
 	{
-		broadcastMessageAll(client.getClientName() + " has disconnected.");
 		connectedClients.remove(client);
+		broadcastMessageAll("'-fx-font-style:italic'#" + client.getClientName() + "_has_disconnected.#");
 	}
 }

@@ -1,0 +1,22 @@
+Server instructions
+	Simply run the server and leave it. Everything should appear in the server console.
+	
+Client instructions
+	Run the client. Input your name in the alias box.
+	Input the address and port of the server you want to connect to, and then press join server; the client will notify you if the connection was successful.
+	Type in the message field and press send to send messages. Close the client to disconnect.
+	
+	Formatting
+		Messages, and individual words, can be formatted using JavaFX CSS.
+		
+		To format a message, input the format string between two apostrophes
+			'<format>'
+		and follow this by your message between two hashes
+			'<format>'#<message>
+		Spaces must be replaced with underscores.
+		Messages must not contain apostrophes.
+		
+		Some examples of formatting to try are:
+			'-fx-font-size:100'#Hello!#
+			'-fx-font-size:40;-fx-font-weight:bold;-fx-fill:red'#Whats_up?#
+			'-fx-font-size:100;-fx-fill:_linear-gradient(from_0%_0%_to_100%_200%,_repeat,_aqua_0%,_red_50%)'#Hi_There!#

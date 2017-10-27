@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,7 +23,11 @@
                         <Button fx:id="btn_joinServer" mnemonicParsing="false" onAction="#handleJoinServer" prefHeight="25.0" prefWidth="82.0" text="Join Server" />
                      </children>
                   </HBox>
-                  <TextFlow fx:id="txtFlow_console" prefHeight="200.0" prefWidth="200.0" />
+                  <ScrollPane>
+                     <content>
+                        <TextFlow fx:id="txtFlow_console" prefHeight="200.0" prefWidth="627.0" />
+                     </content>
+                  </ScrollPane>
                   <HBox prefHeight="25.0" prefWidth="634.0" spacing="10.0">
                      <children>
                         <TextField fx:id="txtFld_message" prefHeight="25.0" prefWidth="589.0" />

@@ -70,7 +70,11 @@ public class Client {
 				} 
 				catch(IOException e)
 				{
-					e.printStackTrace();
+					//e.printStackTrace();
+					
+					// if there is an error here then the client has lost connection to the server
+					clientConsole.getConsoleController().addMessage("'-fx-fill:red'#Lost_connection_to_server.#");
+					clientConsole.getConsoleController().reset();
 				}
 			}
 		});

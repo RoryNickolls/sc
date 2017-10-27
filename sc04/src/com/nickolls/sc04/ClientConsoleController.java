@@ -46,6 +46,7 @@ public class ClientConsoleController extends ConsoleController {
 	@FXML
 	public void handleJoinServer()
 	{
+		txtFlow_console.getChildren().clear();
 		if(client.joinServer(txtFld_alias.getText(), txtFld_address.getText(), Integer.parseInt(txtFld_port.getText())))
 		{
 			txtFld_message.setDisable(false);
@@ -66,6 +67,18 @@ public class ClientConsoleController extends ConsoleController {
 	public void setClient(Client client)
 	{
 		this.client = client;
+	}
+	
+	public void reset()
+	{
+		txtFld_alias.setDisable(false);
+		txtFld_address.setDisable(false);
+		txtFld_port.setDisable(false);
+		btn_joinServer.setDisable(false);
+		
+		txtFld_message.setDisable(true);
+		txtFlow_console.setDisable(true);
+		btn_send.setDisable(true);
 	}
 
 }
