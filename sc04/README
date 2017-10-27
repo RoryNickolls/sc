@@ -9,14 +9,21 @@ Client instructions
 	Formatting
 		Messages, and individual words, can be formatted using JavaFX CSS.
 		
-		To format a message, input the format string between two apostrophes
-			'<format>'
-		and follow this by your message between two hashes
-			'<format>'#<message>
+		To format a message, input the format string between two mews (alt 230)
+			µ<format>µ
+		and follow this by your message between two betas (alt 225)
+			µ<format>µß<message>ß
 		Spaces must be replaced with underscores.
-		Messages must not contain apostrophes.
 		
 		Some examples of formatting to try are:
-			'-fx-font-size:100'#Hello!#
-			'-fx-font-size:40;-fx-font-weight:bold;-fx-fill:red'#Whats_up?#
-			'-fx-font-size:100;-fx-fill:_linear-gradient(from_0%_0%_to_100%_200%,_repeat,_aqua_0%,_red_50%)'#Hi_There!#
+			µ-fx-font-size:100µßHello!ß
+			µ-fx-font-size:40;-fx-font-weight:bold;-fx-fill:redµßWhats_up?ß
+			µ-fx-font-size:100;-fx-fill:_linear-gradient(from_0%_0%_to_100%_200%,_repeat,_aqua_0%,_red_50%)µßHi_There!ß
+			
+	Private Messaging
+		You can private message another client. These messages will not show up in the server console, and will only show for you and the recipient.
+		To do this, type
+			/msg <recipient> <message>
+		For example,
+			/msg Cadet1 Hello cadet! How are you?
+		<recipient> should be the alias of another client connected to the server.

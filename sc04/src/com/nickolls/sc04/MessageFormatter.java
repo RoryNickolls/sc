@@ -21,8 +21,8 @@ public class MessageFormatter {
 		{
 			s = s.replace("_", " ");
 			
-			int firstHash = s.indexOf('#'), lastHash = s.lastIndexOf('#');
-			int firstApostrophe = s.indexOf("'"), lastApostrophe = s.lastIndexOf("'");
+			int firstHash = s.indexOf('ß'), lastHash = s.lastIndexOf('ß');
+			int firstApostrophe = s.indexOf("µ"), lastApostrophe = s.lastIndexOf("µ");
 			
 			MessageFormat format;
 			if(firstHash != -1 && firstApostrophe != -1 && lastHash != -1 && lastApostrophe != -1)

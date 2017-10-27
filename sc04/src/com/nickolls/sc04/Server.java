@@ -35,7 +35,7 @@ public class Server {
 		
 		try {
 			serverSocket = new ServerSocket(8888);
-			serverConsole.getConsoleController().addMessage("'-fx-font-style:italic'#Server_initialised.#");
+			serverConsole.getConsoleController().addMessage("µ-fx-font-style:italicµßServer_initialised.ß");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,19 +61,20 @@ public class Server {
 						
 						// the client will send their alias first, so receive that
 						byte[] nameBytes = new byte[512];
-						reader.read(nameBytes);
+						int numChars = reader.read(nameBytes);
+						if(numChars > MAX_NAME_LENGTH) numChars = MAX_NAME_LENGTH;
 						
 						//assign a random color for this new client
 						Random rand = new Random();
 						String color = "rgb(" + rand.nextInt(255) + "," + rand.nextInt(255) + "," + rand.nextInt(255) + ")";
 						
 						// create a client object and begin listening for data
-						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes, 0, MAX_NAME_LENGTH), clientSocket.getInetAddress().getHostAddress(), color);
+						ServerClient newClient = new ServerClient(clientSocket, new String(nameBytes, 0, numChars), clientSocket.getInetAddress().getHostAddress(), color);
 						connectedClients.add(newClient);
 						listen(newClient);
 						
 						// broadcast a join message to all clients except the new one
-						String joinMsg = "'-fx-font-style:italic'#Client_" + newClient.getClientName() + "_connected_from_" + newClient.getClientAddress() + "#";
+						String joinMsg = "µ-fx-font-style:italicµßClient_" + newClient.getClientName() + "_connected_from_" + newClient.getClientAddress() + "ß";
 						List<ServerClient> exclusion = new ArrayList<ServerClient>();
 						exclusion.add(newClient);
 						broadcastMessageExcluding(joinMsg, true, exclusion);
@@ -112,10 +113,49 @@ public class Server {
 						int readBytes = reader.read(message);
 						if(readBytes != -1)
 						{
+							String messageStr = new String(message, 0, readBytes);
 							
-							// broadcast the message to all clients and the server, with the client's name prefixed
-							String broadcastMsg = "'-fx-font-weight:bold;-fx-fill:" + client.getClientColor() + "'#" + client.getClientName() + "#: " + new String(message, 0, readBytes);
-							broadcastMessageAll(broadcastMsg);
+							// this is a command!
+							if(messageStr.charAt(0) == '/')
+							{
+								if(messageStr.startsWith("/msg"))
+								{
+									String recipientName = "";
+									try {
+										recipientName = messageStr.split(" ")[1];
+										messageStr = messageStr.substring("/msg ".length() + recipientName.length());
+									} 
+									catch(ArrayIndexOutOfBoundsException e)
+									{
+										System.out.println("Unspecified user");
+									}
+									System.out.println(recipientName);
+									
+									ServerClient recipient = findClient(recipientName);
+									// check whether the intended recipient exists
+									if(recipient != null)
+									{
+										String broadcastMsg = "µ-fx-font-weight:bold;-fx-fill:magentaµß" 
+															+ client.getClientName() + "-->" 
+															+ recipient.getClientName() 
+															+ "ß" 
+															+ messageStr;
+										broadcastMessageSpecific(broadcastMsg, client);
+										broadcastMessageSpecific(broadcastMsg, recipient);
+									}
+									else
+									{
+										String broadcastMsg = "µ-fx-fill:redµßCould_not_find_client_with_that_name.ß";
+										broadcastMessageSpecific(broadcastMsg, client);
+									}
+								}
+							}
+							else
+							{
+								// broadcast the message to all clients and the server, with the client's name prefixed
+								String broadcastMsg = "µ-fx-font-weight:bold;-fx-fill:" + client.getClientColor() + "µß" + client.getClientName() + "ß: " + new String(message, 0, readBytes);
+								broadcastMessageAll(broadcastMsg);
+							}
 						}
 					}
 				} 
@@ -184,6 +224,19 @@ public class Server {
 		broadcastMessage(msg.getBytes(), server, excludedClients);
 	}
 	
+	public void broadcastMessageSpecific(String msg, ServerClient client)
+	{
+		List<ServerClient> excluded = new ArrayList<ServerClient>();
+		for(ServerClient sc : connectedClients)
+		{
+			if(sc != client)
+			{
+				excluded.add(sc);
+			}
+		}
+		broadcastMessage(msg.getBytes(), false, excluded);
+	}
+	
 	/**
 	 * Disconnects a particular client from the server
 	 * @param client
@@ -191,7 +244,7 @@ public class Server {
 	private void disconnectClient(ServerClient client)
 	{
 		connectedClients.remove(client);
-		broadcastMessageAll("'-fx-font-style:italic'#" + client.getClientName() + "_has_disconnected.#");
+		broadcastMessageAll("µ-fx-font-style:italicµß" + client.getClientName() + "_has_disconnected.ß");
 		
 		try {
 			if(!client.getClientSocket().isClosed())
@@ -203,5 +256,23 @@ public class Server {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Finds a client by name
+	 * @param alias Name of the client to find
+	 * @return Null if the client is not connected
+	 */
+	private ServerClient findClient(String alias)
+	{
+		for(ServerClient client : connectedClients)
+		{
+			if(client.getClientName().equals(alias))
+			{
+				return client;
+			}
+		}
+		
+		return null;
 	}
 }

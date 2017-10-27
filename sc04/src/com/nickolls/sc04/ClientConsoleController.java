@@ -64,11 +64,11 @@ public class ClientConsoleController extends ConsoleController {
 			txtFld_address.setDisable(true);
 			txtFld_port.setDisable(true);
 			btn_joinServer.setDisable(true);
-			addMessage("'-fx-fill:green'#Connection_successful.#");
+			addMessage("µ-fx-fill:greenµßConnection_successful.ß");
 		}
 		else
 		{
-			addMessage("'-fx-fill:red'#Could_not_connect.#");
+			addMessage("µ-fx-fill:redµßCould_not_connect.ß");
 		}
 	}
 	
