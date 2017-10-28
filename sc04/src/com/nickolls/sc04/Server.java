@@ -3,8 +3,11 @@ package com.nickolls.sc04;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -115,6 +118,8 @@ public class Server {
 						{
 							String messageStr = new String(message, 0, readBytes);
 							
+							// a really hacky way to add commands!
+							// I should have done this in an object oriented way with command objects and an interface...
 							// this is a command!
 							if(messageStr.charAt(0) == '/')
 							{
@@ -132,6 +137,7 @@ public class Server {
 									System.out.println(recipientName);
 									
 									ServerClient recipient = findClient(recipientName);
+									
 									// check whether the intended recipient exists
 									if(recipient != null)
 									{
@@ -140,14 +146,32 @@ public class Server {
 															+ recipient.getClientName() 
 															+ "ß" 
 															+ messageStr;
+										
+										// send the message to the two specific clients involved
 										broadcastMessageSpecific(broadcastMsg, client);
 										broadcastMessageSpecific(broadcastMsg, recipient);
 									}
 									else
 									{
+										
+										// send a message back to client saying the recipient could not be found
 										String broadcastMsg = "µ-fx-fill:redµßCould_not_find_client_with_that_name.ß";
 										broadcastMessageSpecific(broadcastMsg, client);
 									}
+								}
+								else if(messageStr.startsWith("/catmeme"))
+								{
+									
+									// cat memes anyone???
+									
+									messageStr = messageStr.substring("/catmeme".length());
+									URL imgUrl = new URL("http://thecatapi.com/api/images/get?format=src&type=gif");
+									URLConnection conn = imgUrl.openConnection();
+									conn.connect();
+									InputStream is = conn.getInputStream();
+									String broadcastMsg = "[img]" + conn.getURL().toString();
+									broadcastMessageAll(broadcastMsg);
+									is.close();
 								}
 							}
 							else

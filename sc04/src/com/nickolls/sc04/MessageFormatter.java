@@ -16,20 +16,26 @@ public class MessageFormatter {
 	{
 		List<MessageFormat> formatting = new ArrayList<MessageFormat>();
 		
+		// get all the individual words by splitting with spaces 
 		String[] words = msg.split("\\s+");
 		for(String s : words)
 		{
+			// replace underscores with spaces+
 			s = s.replace("_", " ");
 			
-			int firstHash = s.indexOf('ß'), lastHash = s.lastIndexOf('ß');
-			int firstApostrophe = s.indexOf("µ"), lastApostrophe = s.lastIndexOf("µ");
+			// find the indices for when each section ends
+			int firstBeta = s.indexOf('ß'), lastBeta = s.lastIndexOf('ß');
+			int firstMew = s.indexOf("µ"), lastMew = s.lastIndexOf("µ");
 			
 			MessageFormat format;
-			if(firstHash != -1 && firstApostrophe != -1 && lastHash != -1 && lastApostrophe != -1)
+			
+			// if any of these indices were -1 then there is no real section, so create an empty format, otherwise
+			// execute the following code picking out the format and message
+			if(firstBeta != -1 && firstMew != -1 && lastBeta != -1 && lastMew != -1)
 			{
 				format = new MessageFormat(
-						s.substring(firstHash + 1, lastHash),
-						s.substring(firstApostrophe + 1, lastApostrophe));
+						s.substring(firstBeta + 1, lastBeta),
+						s.substring(firstMew + 1, lastMew));
 			}
 			else
 			{
