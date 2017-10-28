@@ -22,30 +22,44 @@ public class ConsoleController {
 	 */
 	public void addMessage(String msg)
 	{
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run()
+		if(msg.contains("[img]"))
+		{
+			
+			// this message is an image!!
+			int imgIndex = msg.indexOf("[img]");
+			String link = msg.substring(imgIndex + "[img]".length());
+			
+			ImageView imgView = new ImageView();
+			try 
 			{
-				if(msg.startsWith("[img]"))
+				// open url to download image
+				Image image = new Image(new URL(link).openStream());
+				imgView.setImage(image);
+				
+				String remainingMessage = msg.substring(0, imgIndex);
+				addMessage(remainingMessage);	
+			} 
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			// this runnable must be at the end of this method so recursion works and messages appear in the correct order
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run()
 				{
-					
-					// this message is an image!!
-					String link = msg.substring("[img]".length());
-					ImageView imgView = new ImageView();
-					try 
-					{
-						imgView.setImage(new Image(new URL(link).openStream()));
-						imgView.resize(256, 256);
-						txtFlow_console.getChildren().add(imgView);
-					} 
-					catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-					
+					txtFlow_console.getChildren().add(imgView);
 					txtFlow_console.getChildren().add(new Text("\n"));
 				}
-				else
+			});
+			
+		}
+		else
+		{
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run()
 				{
 					List<MessageFormat> formats = MessageFormatter.InterpretFormatting(msg);
 					
@@ -65,7 +79,10 @@ public class ConsoleController {
 					
 					txtFlow_console.getChildren().add(new Text("\n"));
 				}
-			}
-		});
+			});
+			
+		}
+		
+		
 	}
 }

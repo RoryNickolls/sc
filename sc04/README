@@ -29,3 +29,12 @@ Client instructions
 		For example,
 			/msg Cadet1 Hello cadet! How are you?
 		<recipient> should be the alias of another client connected to the server.
+		
+	Memes
+		To send a random cat meme, type /catmeme and then press send.
+		To send your own memes or images, your message must take this format:
+			<optional_msg>[img]<link>
+		For example,
+			Hey guys look at this meme! [img]http://25.media.tumblr.com/tumblr_lrxldzOzEG1r3qoego1_400.gif
+		Or
+			µ-fx-font-size:50µßLOOK_AT_THIS_MEME!ß [img]http://25.media.tumblr.com/tumblr_lrxldzOzEG1r3qoego1_400.gif
