@@ -23,5 +23,35 @@ public class Hypocycloid {
 		return ((fixedCircleRadius + movingCircleRadius) * Math.sin(t)
 				- (movingCircleRadius + penOffset) * Math.sin(((fixedCircleRadius + movingCircleRadius) / movingCircleRadius) * t));
 	}
+	
+	public float getPenOffset()
+	{
+		return this.penOffset;
+	}
+	
+	public float getFixedCircleRadius()
+	{
+		return this.fixedCircleRadius;
+	}
+	
+	public float getMovingCircleRadius()
+	{
+		return this.movingCircleRadius;
+	}
+	
+	public void setPenOffset(float penOffset)
+	{
+		this.penOffset = penOffset;
+	}
+	
+	public void setFixedCircleRadius(float fixedCircleRadius)
+	{
+		this.fixedCircleRadius = fixedCircleRadius;
+	}
+	
+	public void setMovingCircleRadius(float movingCircleRadius)
+	{
+		this.movingCircleRadius = movingCircleRadius;
+	}
 
 }
