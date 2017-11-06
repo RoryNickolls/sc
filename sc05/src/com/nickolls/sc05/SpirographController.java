@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class SpirographController {
 	
 	@FXML
 	private Canvas canvas;
+	
+	@FXML
+	private VBox vBox_hypocycloids;
 	
 	private List<Hypocycloid> hypocycloidList;
 	
@@ -20,6 +26,7 @@ public class SpirographController {
 	@FXML
 	public void initialize()
 	{
+		//vBox_hypocycloids.getChildren().add(HypocycloidTab.GetNewTab());
 		hypocycloidList = new ArrayList<Hypocycloid>();
 		hypocycloidList.add(new Hypocycloid(50, 10, 12));
 		hypocycloidList.add(new Hypocycloid(12, 50, 10));
