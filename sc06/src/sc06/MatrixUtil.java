@@ -25,23 +25,29 @@ public class MatrixUtil {
 		return result;
 	}
 	
-	public static void main(String[] args)
+	public static double convolve(int[][] kernel, int[][] pixelData)
 	{
-		int[][] matrix1 = new int[][] { { 1, 2, 3 },
-										{ 4, 5, 6 } };
-		int[][] matrix2 = new int[][] { { 7, 8 },
-										{ 9, 10 },
-										{ 11, 12 } };
-		int[][] result = multiply(matrix1, matrix2);
-		for(int row = 0; row < result.length; row++)
+		double result = 0;
+		
+		// first flip the rows and columns of the kernel
+		int[][] flippedKernel = new int[kernel.length][kernel[0].length];
+		for(int row = 0; row < kernel.length; row++)
 		{
-			String line = "";
-			for(int col = 0; col < result[0].length; col++)
+			for(int col = 0; col < kernel[0].length; col++)
 			{
-				line += result[row][col] + ",";
+				flippedKernel[kernel.length - row - 1][kernel[0].length - col - 1] = kernel[row][col];
 			}
-			System.out.println(line);
 		}
+		
+		// then multiply 'locally similar' entries of the flippedKernel matrix and the pixelData matrix
+		for(int row = 0; row < kernel.length; row++)
+		{
+			for(int col = 0; col < kernel[0].length; col++)
+			{
+				result += flippedKernel[row][col] * pixelData[row][col];
+			}
+		}
+		
+		return result;
 	}
-
 }
