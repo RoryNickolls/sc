@@ -49,6 +49,7 @@ public class EdgeDetector {
 	{
 		BufferedImage greyscale = convertToGreyscale(getBufferedImage(icon));
 		
+		// declare kernels
 		final int[][] xKernel = new int[][] { 
 			{ 1, 0, -1 },
 			{ 2, 0, -2 },
@@ -63,10 +64,13 @@ public class EdgeDetector {
 		
 		float[][] pixelValues = new float[greyscale.getWidth() - xKernel[0].length][greyscale.getHeight() - yKernel.length];
 		float highestValue = 0;
+		
+		// loop through all pixels
 		for(int x = 0; x < pixelValues.length; x++)
 		{
 			for(int y = 0; y < pixelValues[0].length; y++)
 			{
+				// get colors of the surrounding pixels
 				int[][] pixelData = new int[3][3];
 				for(int i = x; i < x + pixelData.length; i++)
 				{
@@ -78,6 +82,7 @@ public class EdgeDetector {
 					}
 				}
 				
+				// apply convolution between each matrix
 				double gx = MatrixUtil.convolve(xKernel, pixelData);
 				double gy = MatrixUtil.convolve(yKernel, pixelData);
 				double g = Math.sqrt(Math.pow(gx, 2) + Math.pow(gy, 2));
