@@ -19,17 +19,8 @@ public class EdgeDetector {
 		
 	}
 	
-	private BufferedImage convertToGreyscale(ImageIcon iconImage)
+	private BufferedImage convertToGreyscale(BufferedImage image)
 	{
-		// get local graphics configuration
-		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice dev = env.getDefaultScreenDevice();
-		GraphicsConfiguration conf = dev.getDefaultConfiguration();
-		
-		// create an empty image that uses the local configuration
-		BufferedImage image = conf.createCompatibleImage(iconImage.getIconWidth(), iconImage.getIconHeight());
-		// paint the icon into the graphics of the empty image
-		iconImage.paintIcon(null, image.createGraphics(), 0, 0);
 		// create a greyscale type image to convert
 		BufferedImage grey = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
 		// create a convert operation from the icon's colorspace to the greyscale image's colorspace
@@ -40,9 +31,23 @@ public class EdgeDetector {
 		return grey;
 	}
 	
-	public BufferedImage parseImage(ImageIcon icon)
+	public BufferedImage getBufferedImage(ImageIcon iconImage)
 	{
-		BufferedImage greyscale = convertToGreyscale(icon);
+		// get local graphics configuration
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice dev = env.getDefaultScreenDevice();
+		GraphicsConfiguration conf = dev.getDefaultConfiguration();
+				
+		// create an empty image that uses the local configuration
+		BufferedImage image = conf.createCompatibleImage(iconImage.getIconWidth(), iconImage.getIconHeight());
+		// paint the icon into the graphics of the empty image
+		iconImage.paintIcon(null, image.createGraphics(), 0, 0);
+		return image;
+	}
+	
+	public BufferedImage detectEdges(ImageIcon icon, int threshold)
+	{
+		BufferedImage greyscale = convertToGreyscale(getBufferedImage(icon));
 		
 		final int[][] xKernel = new int[][] { 
 			{ 1, 0, -1 },
@@ -93,7 +98,9 @@ public class EdgeDetector {
 			{
 				// create the value of red in the color proportionally of the value of g
 				int red = (int)((pixelValues[x][y] / highestValue) * 255);
-				Color color = new Color(red, 0, 0);
+				if(red <= threshold) red = 0;
+				else red = 255;
+				Color color = new Color(red, red, red);
 				edgeImage.setRGB(x, y, color.getRGB());
 			}
 		}
@@ -103,13 +110,16 @@ public class EdgeDetector {
 	
 	public static void main(String[] args)
 	{
-		ImageIcon img = new ImageIcon("crowd.png");
-		
-		EdgeDetector detector = new EdgeDetector();
-		BufferedImage outputImg = detector.parseImage(img);
-		File output = new File("output.png");
+		ImageIcon img = new ImageIcon("input.jpg");
 		try {
-			ImageIO.write(outputImg, "png", output);
+			EdgeDetector detector = new EdgeDetector();
+			CircleDetector circ = new CircleDetector();
+		
+			BufferedImage edgeDetect = detector.detectEdges(img, 40);
+			ImageIO.write(edgeDetect, "png", new File("output_edge.png"));
+			BufferedImage circDetect = circ.houghTransform(edgeDetect, 100, 110);
+		
+			ImageIO.write(circDetect, "png", new File("output_circles.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
