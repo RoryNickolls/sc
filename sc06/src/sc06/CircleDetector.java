@@ -2,6 +2,8 @@ package sc06;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class CircleDetector {
 	
@@ -46,6 +48,7 @@ public class CircleDetector {
 			}
 		}
 		
+		BufferedImage circles = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
 		// loop through all pixels in the image
 		for(int a = 0; a < acc.length; a++)
 		{
@@ -57,12 +60,14 @@ public class CircleDetector {
 					// set the color of the pixel based on its proportionality to the highest vote
 					float colorVal = (acc[a][b][r] / (float)highestValues[r]) * 255;
 					Color curColor = new Color((int)colorVal, (int)colorVal, (int)colorVal);
-					image.setRGB(a, b, curColor.getRGB());
+					
+					if(colorVal > 50)
+						circles.setRGB(a, b, curColor.getRGB());
 				}
 			}
 		}
 		
-		return image;
+		return circles;
 	}
 
 }

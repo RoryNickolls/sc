@@ -120,9 +120,9 @@ public class EdgeDetector {
 			EdgeDetector detector = new EdgeDetector();
 			CircleDetector circ = new CircleDetector();
 		
-			BufferedImage edgeDetect = detector.detectEdges(img, 40);
+			BufferedImage edgeDetect = detector.detectEdges(img, 0);
 			ImageIO.write(edgeDetect, "png", new File("output_edge.png"));
-			BufferedImage circDetect = circ.houghTransform(edgeDetect, 100, 110);
+			BufferedImage circDetect = circ.houghTransform(edgeDetect, 3, 5);
 		
 			ImageIO.write(circDetect, "png", new File("output_circles.png"));
 		} catch (IOException e) {
