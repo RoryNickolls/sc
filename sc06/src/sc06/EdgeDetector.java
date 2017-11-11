@@ -112,22 +112,4 @@ public class EdgeDetector {
 		
 		return edgeImage;
 	}
-	
-	public static void main(String[] args)
-	{
-		ImageIcon img = new ImageIcon("input.jpg");
-		try {
-			EdgeDetector detector = new EdgeDetector();
-			CircleDetector circ = new CircleDetector();
-		
-			BufferedImage edgeDetect = detector.detectEdges(img, 0);
-			ImageIO.write(edgeDetect, "png", new File("output_edge.png"));
-			BufferedImage circDetect = circ.houghTransform(edgeDetect, 3, 5);
-		
-			ImageIO.write(circDetect, "png", new File("output_circles.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
